@@ -9,17 +9,6 @@ from typing import Sequence
 from . import FileInfo, Worker
 
 
-def is_older_than(mod_time, age):
-    print("OLDER THANK CALLED")
-    now = datetime.now()
-    u_now = now.timestamp()
-    age_limt = u_now - int(age)*86400
-    mt = mod_time[:-11]
-    mt_dt = datetime.strptime(mt, '%Y-%m-%dT%H:%M:%S')
-    mt_ut = mt_dt.timestamp()
-    print("MT: " + str(mt_ut) + " : " + str(age_limit))
-    return(mt_ut < age_limit) 
-
 class SearchOlder:
     def __init__(self, in_args: Sequence[str]):
         parser = argparse.ArgumentParser(description="")
@@ -33,10 +22,7 @@ class SearchOlder:
         age_f = float(age) * 86400
         now = datetime.now()
         u_now = now.timestamp()
-        print("NOW: " + str(u_now) + "AGE: " + str(age_f))
-        print("LIMIT: " + str(u_now - age_f))
         self.age_limit = u_now - age_f
-#        print("LIMIT = " + str(age_limit))
         self.itemtype = None
         self.search_str = None
         self.search_re = None
@@ -65,18 +51,11 @@ class SearchOlder:
 
             if found:
                 if file_obj['type'] == "FS_FILE_TYPE_FILE":
-#                    print(self.__dict__)
-#                    print("FILETIME: " + file_obj['modification_time'])
                     mt = file_obj['modification_time'][:19]
-#                    print("MT: " + mt)
                     mt_dt = datetime.strptime(mt, '%Y-%m-%dT%H:%M:%S')
                     mt_ut = mt_dt.timestamp()
-                    print("MT: " + str(mt_ut) + " : " + str(self.age_limit))
                     if mt_ut > self.age_limit:
-                        print("Skipping " + file_obj['path'])
-                        found = False
                         continue
-                    print("USING: " + file_obj['path'])
                 else:
                     continue
                 if "name" in self.cols:
@@ -100,7 +79,6 @@ class SearchOlder:
                     except:
                         pass
                 if self.itemtype is None or self.itemtype in file_obj["type"].lower():
-                    print("LINE: " + file_obj['path'])
                     line = "|".join(
                         [
                             # mypy insists "TypedDict key must be a string literal"
