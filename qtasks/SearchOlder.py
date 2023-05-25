@@ -17,6 +17,7 @@ class SearchOlder:
         parser.add_argument("--itemtype", help="")
         parser.add_argument("--cols", help="")
         parser.add_argument("--age", help="", dest="age")
+        parser.add_argument("--time", help="")
         args = parser.parse_args(in_args)
         age = args.age
         age_f = float(age) * 86400
@@ -35,6 +36,10 @@ class SearchOlder:
             self.cols = args.cols.split(",")
         if args.itemtype:
             self.itemtype = args.itemtype
+        if args.time:
+            self.timetype = args.time
+        else:
+            self.timetype = "modification_time"
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
@@ -51,7 +56,7 @@ class SearchOlder:
 
             if found:
                 if file_obj['type'] == "FS_FILE_TYPE_FILE":
-                    mt = file_obj['modification_time'][:19]
+                    mt = file_obj[self.timetype][:19]
                     mt_dt = datetime.strptime(mt, '%Y-%m-%dT%H:%M:%S')
                     mt_ut = mt_dt.timestamp()
                     if mt_ut > self.age_limit:
