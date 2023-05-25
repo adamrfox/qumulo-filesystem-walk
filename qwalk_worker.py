@@ -21,15 +21,16 @@ from qtasks.CopyDirectory import CopyDirectory
 from qtasks.DataReductionTest import DataReductionTest
 from qtasks.ModeBitsChecker import ModeBitsChecker
 from qtasks.Search import Search
+from qtasks.SearchOlder import SearchOlder
 from qtasks.SummarizeOwners import SummarizeOwners
 from qumulo.lib.request import RequestError
 from qumulo.rest_client import RestClient
-
 QTASKS: Mapping[str, Type[Task]] = {
     "ChangeExtension": ChangeExtension,
     "DataReductionTest": DataReductionTest,
     "ModeBitsChecker": ModeBitsChecker,
     "Search": Search,
+    "SearchOlder": SearchOlder,
     "SummarizeOwners": SummarizeOwners,
     "ApplyAcls": ApplyAcls,
     "CopyDirectory": CopyDirectory,
